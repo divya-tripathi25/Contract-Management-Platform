@@ -5,7 +5,7 @@ const ContractContext = createContext();
 const initialState = {
   blueprints: [],
   contracts: [],
-  selectedContractId: null, 
+  selectedContractId: null,
 };
 
 function reducer(state, action) {
@@ -16,7 +16,6 @@ function reducer(state, action) {
         blueprints: [...state.blueprints, action.payload],
       };
 
-    
     case "ADD_CONTRACT":
       return {
         ...state,
@@ -29,6 +28,24 @@ function reducer(state, action) {
         contracts: state.contracts.map((c) =>
           c.id === action.payload.id
             ? { ...c, status: action.payload.status }
+            : c
+        ),
+      };
+
+
+    case "UPDATE_FIELD_VALUE":
+      return {
+        ...state,
+        contracts: state.contracts.map((c) =>
+          c.id === action.payload.contractId
+            ? {
+                ...c,
+                fields: c.fields.map((f) =>
+                  f.id === action.payload.fieldId
+                    ? { ...f, value: action.payload.value }
+                    : f
+                ),
+              }
             : c
         ),
       };

@@ -1,70 +1,148 @@
-# Getting Started with Create React App
+                                                  Contract Management Platform 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Overview
 
-## Available Scripts
+This project is a frontend-only Contract Management Platform built using React JS.
+It allows users to create reusable contract blueprints, generate contracts from those blueprints, fill contract field values, and manage contracts through a controlled lifecycle using a dashboard interface.
 
-In the project directory, you can run:
+The application focuses on clean architecture, state management, and logical UX flow, without using a backend.
 
-### `npm start`
+# Setup Instructions
+Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Node.js (v16 or later recommended)
+npm or yarn
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Steps to Run the Project
+->Install dependencies
+npm install
 
-### `npm test`
+->Start the development server
+npm start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+The application will run at:
+👉 http://localhost:3000
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Architecture and Design Decisions
+1. Component-Based Architecture
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The application is structured using modular React components to ensure separation of concerns:
 
-### `npm run eject`
+BlueprintBuilder – creates reusable contract templates
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+ContractForm – generates contracts from selected blueprints
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ContractDetail – allows users to fill field values
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+ContractTable (Dashboard) – displays and manages contracts
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+ContractContext – centralized state management
 
-## Learn More
+This structure improves readability, maintainability, and scalability.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. State Management (Context API + useReducer)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Global state is managed using React Context API with useReducer.
 
-### Code Splitting
+Why this approach?
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+No backend is required
 
-### Analyzing the Bundle Size
+Predictable and controlled state updates
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Easy handling of contract lifecycle transitions
 
-### Making a Progressive Web App
+Avoids prop drilling
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+State includes:
 
-### Advanced Configuration
+Blueprints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Contracts
 
-### Deployment
+Selected contract
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Contract lifecycle status
 
-### `npm run build` fails to minify
+Contract field values
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+3. Contract Lifecycle Design
+
+Each contract follows a strict lifecycle:
+
+CREATED → APPROVED → SENT → SIGNED → LOCKED
+(REVOKED allowed before LOCKED)
+
+
+Lifecycle rules:
+
+Users cannot skip steps
+
+Locked contracts cannot be edited
+
+Revoked contracts cannot proceed further
+
+Lifecycle actions are handled centrally via reducer logic to ensure consistency.
+
+4. Contract Creation and Field Inheritance
+
+Contracts are generated from selected blueprints
+
+All blueprint fields are copied into the contract
+
+Each field includes a value property for user input
+
+Blueprints remain reusable and unchanged
+
+Users must fill all contract fields before lifecycle actions are enabled.
+
+5. Dashboard Design
+
+The dashboard displays contracts in a table view, grouped and filterable by status:
+
+Pending – Created, Approved, Sent
+
+Active – Signed
+
+Signed – Locked
+
+Each row displays:
+
+Contract name
+
+Blueprint name
+
+Grouped status
+
+Created date
+
+Action buttons (approve, send, sign, lock, revoke)
+
+This provides a clear overview of contract progress.
+
+# Assumptions and Limitations
+Assumptions
+
+This is a frontend-only application
+
+No authentication or user roles
+
+Signature field is implemented as a text-based confirmation
+
+Data is stored in memory (no persistence across refresh)
+
+Limitations
+
+No backend or database integration
+
+Data resets on page refresh
+
+No drag-and-drop field placement
+
+No automated tests included
+
+No visual status timeline
+
+These choices were intentional to focus on core functionality, clean logic, and assignment requirements.

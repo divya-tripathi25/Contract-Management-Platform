@@ -3,51 +3,49 @@ import { useContracts } from "../../context/ContractContext";
 
 export default function ContractForm() {
   const { state, dispatch } = useContracts();
+
   const [selectedBpId, setSelectedBpId] = useState("");
   const [contractName, setContractName] = useState("");
 
-  
   const generateContract = () => {
     if (!selectedBpId || !contractName) {
-      alert("Please select a blueprint and enter a contract name");
+      alert("Select blueprint and enter contract name");
       return;
     }
 
-    
     const bp = state.blueprints.find(
-      (b) => b.id === Number(selectedBpId)
+      (b) => String(b.id) === String(selectedBpId)
     );
 
-    if (!bp) {
-      alert("Selected blueprint not found");
-      return;
-    }
+    if (!bp) return;
 
-    
+    const contractId = Date.now();
+
     dispatch({
       type: "ADD_CONTRACT",
       payload: {
-        id: Date.now(),
-        name: contractName,              
-        blueprintName: bp.name,          
-        fields: bp.fields.map((f) => ({
-          ...f,
-          value: "",
-        })),
-        status: "CREATED",               
+        id: contractId,
+        name: contractName,
+        blueprintName: bp.name,
+        fields: bp.fields.map((f) => ({ ...f, value: "" })),
+        status: "CREATED",
         createdAt: new Date().toISOString(),
       },
     });
 
     
+    dispatch({
+      type: "SELECT_CONTRACT",
+      payload: contractId,
+    });
+
     setSelectedBpId("");
     setContractName("");
   };
 
   return (
     <div>
-      <h2>Generate a Contract</h2>
-
+      <h2>Generate Contract</h2>
 
       <label>Blueprint</label>
       <select
@@ -62,27 +60,13 @@ export default function ContractForm() {
         ))}
       </select>
 
-      
-      <label>Contract name</label>
+      <label>Contract Name</label>
       <input
-        placeholder="Enter contract name"
         value={contractName}
         onChange={(e) => setContractName(e.target.value)}
       />
 
-      <button
-        onClick={generateContract}
-        disabled={state.blueprints.length === 0}
-      >
-        Generate Contract
-      </button>
-
-      
-      {state.blueprints.length === 0 && (
-        <p className="empty-text">
-          No blueprints available. Please create one first.
-        </p>
-      )}
+      <button onClick={generateContract}>Generate Contract</button>
     </div>
   );
 }

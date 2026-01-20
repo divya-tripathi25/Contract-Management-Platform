@@ -6,12 +6,24 @@ export default function ContractTable() {
   const [filter, setFilter] = useState("ALL");
 
   
+  const getGroupStatus = (status) => {
+    if (["CREATED", "APPROVED", "SENT"].includes(status)) {
+      return "PENDING";
+    }
+    if (status === "SIGNED") {
+      return "ACTIVE";
+    }
+    if (status === "LOCKED") {
+      return "SIGNED";
+    }
+    return status; 
+  };
+
   const filteredContracts = state.contracts.filter((c) => {
     if (filter === "ALL") return true;
-    return c.status === filter;
+    return getGroupStatus(c.status) === filter;
   });
 
-  
   const updateStatus = (id, status) => {
     dispatch({
       type: "UPDATE_STATUS",
@@ -22,27 +34,22 @@ export default function ContractTable() {
   return (
     <div>
       <h2>Contract Dashboard</h2>
-      <p>Filter by lifecycle stage, open contracts, and advance them in-line.</p>
-
-    
-      <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-        <option value="ALL">All</option>
-        <option value="CREATED">Created</option>
-        <option value="APPROVED">Approved</option>
-        <option value="SENT">Sent</option>
-        <option value="SIGNED">Signed</option>
-        <option value="LOCKED">Locked</option>
-        <option value="REVOKED">Revoked</option>
-      </select>
 
       
+      <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+        <option value="ALL">All</option>
+        <option value="PENDING">Pending</option>
+        <option value="ACTIVE">Active</option>
+        <option value="SIGNED">Signed</option>
+      </select>
+
       <table>
         <thead>
           <tr>
-            <th>Contract</th>
-            <th>Blueprint</th>
+            <th>Contract Name</th>
+            <th>Blueprint Name</th>
             <th>Status</th>
-            <th>Created</th>
+            <th>Created Date</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -59,8 +66,11 @@ export default function ContractTable() {
               <td>{c.name}</td>
               <td>{c.blueprintName}</td>
 
+              
               <td>
-                <span className={`status ${c.status}`}>{c.status}</span>
+                <span className={`status ${getGroupStatus(c.status)}`}>
+                  {getGroupStatus(c.status)}
+                </span>
               </td>
 
               <td>{new Date(c.createdAt).toLocaleDateString()}</td>
@@ -75,7 +85,7 @@ export default function ContractTable() {
 
                 {c.status === "APPROVED" && (
                   <button onClick={() => updateStatus(c.id, "SENT")}>
-                    Move to Sent
+                    Send
                   </button>
                 )}
 

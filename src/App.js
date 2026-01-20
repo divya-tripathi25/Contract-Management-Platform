@@ -4,6 +4,7 @@ import BlueprintBuilder from "./components/Blueprint/BlueprintBuilder";
 import { ContractProvider } from "./context/ContractContext";
 import ContractForm from "./components/Contract/ContractForm";
 import ContractTable from "./components/Dashboard/ContractTable";
+import ContractDetail from "./components/Contract/ContractDetail";
 
 function App() {
   return (
@@ -23,14 +24,13 @@ function App() {
 
         
         <div className="section">
-          <ContractTable />
-        </div>
-
-        {/*
-        <div className="section">
           <ContractDetail />
         </div>
-        */}
+
+      
+        <div className="section">
+          <ContractTable />
+        </div>
       </div>
     </ContractProvider>
   );
