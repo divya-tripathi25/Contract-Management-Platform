@@ -1,4 +1,4 @@
-                                                  Contract Management Platform 
+# Contract Management Platform 
 
 # Overview
 
@@ -14,10 +14,13 @@ Node.js (v16 or later recommended)
 npm or yarn
 
 Steps to Run the Project
+
 ->Install dependencies
+
 npm install
 
 ->Start the development server
+
 npm start
 
 
@@ -123,7 +126,7 @@ Action buttons (approve, send, sign, lock, revoke)
 This provides a clear overview of contract progress.
 
 # Assumptions and Limitations
-Assumptions
+->Assumptions
 
 This is a frontend-only application
 
@@ -133,7 +136,7 @@ Signature field is implemented as a text-based confirmation
 
 Data is stored in memory (no persistence across refresh)
 
-Limitations
+->Limitations
 
 No backend or database integration
 
