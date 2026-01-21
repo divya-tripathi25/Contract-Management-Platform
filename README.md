@@ -1,5 +1,7 @@
 # Contract Management Platform 
 
+Link of the application deployed on Vercel: https://contract-management-platform-wine.vercel.app/
+
 # Overview
 
 This project is a frontend-only Contract Management Platform built using React JS.
